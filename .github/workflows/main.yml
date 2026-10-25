@@ -17,8 +17,9 @@ jobs:
 
     - name: Create RDP User With Secure Password
       run: |
-        net user AcidPurple123 AcidPurple41731 /add
-        net localgroup Administrators AcidPurple123 /add
+        $Password = ConvertTo-SecureString "AcidPurple41731" -AsPlainText -Force
+        New-LocalUser -Name "AcidPurple123" -Password $Password
+        Add-LocalGroupMember -Group "Administrators" -Member "AcidPurple123"
 
     - name: Install Tailscale
       run: |
