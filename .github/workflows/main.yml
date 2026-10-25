@@ -23,8 +23,7 @@ jobs:
 
     - name: Install Tailscale
       run: |
-        Set-ExecutionPolicy Bypass -Scope Process -Force
-        iex ((New-Object System.Net.WebClient).DownloadString('https://tailscale.com/install.ps1'))
+        winget install Tailscale.Tailscale --silent --accept-package-agreements --accept-source-agreements
 
     - name: Establish Connection of Tailscale
       run: |
