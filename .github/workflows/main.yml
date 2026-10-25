@@ -1,0 +1,42 @@
+name: RDP
+
+on: workflow_dispatch
+
+jobs:
+  build:
+  
+    runs-on: windows-latest
+    timeout-minutes: 360
+
+    steps:
+    - name: Configure Core RDP Settings
+      run: |
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-Name "fDenyTSConnections" -Value 0
+        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
+
+    - name: Create RDP User With Secure Password
+      run: |
+        $Password = ConvertTo-SecureString "Skype123!" -AsPlainText -Force
+        New-LocalUser -Name "Skype" -Password $Password
+        Add-LocalGroupMember -Group "Administrators" -Member "Skype"
+
+    - name: Install Tailscale
+      run: |
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        iex ((New-Object System.Net.WebClient).DownloadString('https://tailscale.com/install.ps1'))
+
+    - name: Establish Connection of Tailscale
+      run: |
+        & "C:\Program Files\Tailscale\tailscale.exe" up --authkey=tskey-auth-k91dpk76z511CNTRL-d4yohfWMi31QNoHsvFDa4173j2zVVwh1
+
+    - name: Verify RDP Accessibility
+      run: |
+        Write-Host "Tailscale IP:"
+        & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+        Write-Host "RDP connection successful!"
+
+    - name: Maintain Connection
+      run: |
+        while ($true) { Start-Sleep -Seconds 30 }
+        
