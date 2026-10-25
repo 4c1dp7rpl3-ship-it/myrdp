@@ -17,9 +17,8 @@ jobs:
 
     - name: Create RDP User With Secure Password
       run: |
-        $Password = ConvertTo-SecureString "Skype123!" -AsPlainText -Force
-        New-LocalUser -Name "Skype" -Password $Password
-        Add-LocalGroupMember -Group "Administrators" -Member "Skype"
+        net user AcidPurple123 AcidPurple4173. /add
+        net localgroup Administrators AcidPurple123 /add
 
     - name: Install Tailscale
       run: |
