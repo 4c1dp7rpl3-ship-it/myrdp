@@ -17,7 +17,7 @@ jobs:
 
     - name: Create RDP User With Secure Password
       run: |
-        net user AcidPurple123 AcidPurple4173. /add
+        net user AcidPurple123 AcidPurple41731 /add
         net localgroup Administrators AcidPurple123 /add
 
     - name: Install Tailscale
